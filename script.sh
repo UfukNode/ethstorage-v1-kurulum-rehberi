@@ -3,7 +3,7 @@
 # EthStorage Trusted Setup Ceremony Otomatik Kurulum Scripti
 # Kullanım: bash ethstorage_ceremony.sh
 
-set -e
+set -e 
 
 # Renkli çıktılar için
 RED='\033[0;31m'
@@ -59,30 +59,41 @@ install_dependencies() {
     print_success "Sistem paketleri kuruldu"
 }
 
+# buraya NVM kontrolü ekledim NVM kurulu sunucularda hata verip yarıda kesiliyor
 install_nvm() {
-    print_info "NVM kuruluyor..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    
-    # NVM'i mevcut shell'e yükle
+    print_info "NVM kontrol ediliyor..."
     export NVM_DIR="$HOME/.nvm"
+
+    if [ -d "$NVM_DIR" ]; then
+        print_success "NVM zaten kurulu, shell'e yükleniyor..."
+    else
+        print_info "NVM kuruluyor..."
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+        print_success "NVM kuruldu"
+    fi
+
+    # NVM'i mevcut shell'e yükle
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    
-    print_success "NVM kuruldu"
 }
 
+# aynı şekilde buraya kontrolü ekledim
 install_nodejs() {
+    print_info "Node.js kontrol ediliyor..."
+    if command -v node >/dev/null 2>&1; then
+        print_success "Node.js zaten kurulu: $(node -v)"
+    else
     print_info "Node.js 18 kuruluyor..."
-    
     # NVM'in yüklü olduğundan emin ol
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    
+        
     nvm install 18
     nvm use 18
     nvm alias default 18
     
     print_success "Node.js 18 kuruldu"
+    fi
 }
 
 setup_ceremony() {

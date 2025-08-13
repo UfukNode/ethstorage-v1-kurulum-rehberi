@@ -13,6 +13,12 @@ Bu script, EthStorage v1 Trusted Setup Ceremony'e katılmak için gereken tüm k
 
 ---
 
+Not: Sunucu gerekmeden kurulum için arkadaşlar codespaces kullanabilir. Bunun için sunucuya girdiklerinde aşağıdaki komutları uygularlarsa sorunsuz kurulumu yapacaklardır. 
+```bash
+sudo su
+cd ../../root/
+```
+
 ### 1- Script'i çalıştır
 
 ```bash
